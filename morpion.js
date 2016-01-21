@@ -128,7 +128,16 @@ function calculateProbabilities(){
 function actionIA(){
     var position = "";
 
-    mustAttack();
+    //IA doit attaquer
+    var mustAttack = mustAttack();
+    if(!isNaN(mustAttack))
+    {
+        position = mustAttack;
+
+    }
+
+    //TODO : MustDefend
+
 
         //Partie aléatoire
         //Recupère le nombre le + grand
@@ -162,12 +171,14 @@ function mustAttack(){
         for(var j=0; j<3; j++){
             tab[winCombinations[i][j]] = grille[winCombinations[i][j]];
         }
-        console.log(tab);
-        //Compte le nombre d'occurence de X dans le tableau
-        if(countOccurence(tab, "X") == 2){
 
+        //Compte le nombre d'occurence de X dans le tableau
+        if(countOccurence(tab, "O") == 2){
+            console.log("Possibilité d'attaque");
+            return getEmptyCaseInWinCombinations(tab);
         }
     }
+    return NaN;
 }
 
 function countOccurence(tab, search){
@@ -178,4 +189,8 @@ function countOccurence(tab, search){
         }
     }
     return cpt;
+}
+
+function getEmptyCaseInWinCombinations(tab){
+    return tab.indexOf("-");
 }
