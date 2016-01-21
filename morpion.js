@@ -129,16 +129,17 @@ function actionIA(){
     var position = "";
 
     //IA doit attaquer
-    var mustAttack = mustAttack();
-    if(!isNaN(mustAttack))
-    {
-        position = mustAttack;
+    position = mustAttackOrDefend("O");
 
+    if(isNaN(position))
+    {
+        //IA doit defendre
+        position = mustAttackOrDefend("X");
     }
 
-    //TODO : MustDefend
-
-
+    //IA fait un coup aléatoire sur les positions ayant le plus de chance de victoire
+    if(isNaN(position))
+    {
         //Partie aléatoire
         //Recupère le nombre le + grand
         var max = 0;
@@ -160,11 +161,14 @@ function actionIA(){
         var rand = Math.floor((Math.random() * (tab.length - 1)) + 0);
         position = tab[rand];
 
+    }
+
 
     addSign(position);
 }
 
-function mustAttack(){
+
+function mustAttackOrDefend(symbol){
 
     for(var i = 0; i < 8; i++){
         var tab =[];
@@ -173,13 +177,14 @@ function mustAttack(){
         }
 
         //Compte le nombre d'occurence de X dans le tableau
-        if(countOccurence(tab, "O") == 2){
-            console.log("Possibilité d'attaque");
+        if(countOccurence(tab, symbol) == 2){
+            console.log("Possibilité : " + symbol);
             return getEmptyCaseInWinCombinations(tab);
         }
     }
     return NaN;
 }
+
 
 function countOccurence(tab, search){
     var cpt = 0;
@@ -192,5 +197,10 @@ function countOccurence(tab, search){
 }
 
 function getEmptyCaseInWinCombinations(tab){
-    return tab.indexOf("-");
+    if(tab.indexOf("-") == -1){
+        return NaN;
+    }
+    else{
+        return tab.indexOf("-");
+    }
 }
