@@ -1,11 +1,9 @@
 var grille = ["-","-","-","-","-","-","-","-","-"];
-
 var winCombinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [6, 4, 2]];
-
 //Tableau des probabilité pour chaque case
 var probPossibilities = [];
-
 var player = "X";
+var gameOver = false;
 
 initProb();
 afficheGrille();
@@ -29,14 +27,15 @@ function getCombinationsByIndex(index){
 }
 
 function checkWin(){
+
     //Boucle sur le tableau des combinisons
     for(var i = 0; i < 8; i++){
         if(grille[winCombinations[i][0]] == grille[winCombinations[i][1]] && grille[winCombinations[i][2]] == grille[winCombinations[i][1]] && grille[winCombinations[i][0]] != "-"){
-            console.log("Gagnant : " + grille[winCombinations[i][0]]);
-            return true;
+            document.getElementById('gagnant').innerHTML = "Gagnant : " + grille[winCombinations[i][0]] +" en " + winCombinations[i];
+            gameOver = true;
+            break;
         }
     }
-    return false;
 }
 
 function afficheGrille(){
@@ -63,34 +62,35 @@ function afficheGrille(){
 
 
 function addSign(position){
-    //Verifie que la case est dispo
-    if(grille[position] == "-"){
-        //Vérifie quel joueur joue
-        if(player == "X"){
-            grille[position] = "X";
-        }
-        else{
-            grille[position] = "O";
-        }
+    if(!gameOver) {
+        //Verifie que la case est dispo
+        if (grille[position] == "-") {
+            //Vérifie quel joueur joue
+            if (player == "X") {
+                grille[position] = "X";
+            }
+            else {
+                grille[position] = "O";
+            }
 
-        //Change de joueur
-        switchPlayer();
+            //Change de joueur
+            switchPlayer();
 
-        //Refaire le tableau de probabilité pour l'IA
-        calculateProbabilities();
-        if(player == "O"){
-            actionIA();
+            //Refaire le tableau de probabilité pour l'IA
+            calculateProbabilities();
+            if (player == "O") {
+                actionIA();
+            }
         }
-    }
-    else{
-        console.log("Case prise");
+        else {
+            console.log("Case prise");
 
+        }
+        afficheGrille();
+        checkWin();
     }
-    afficheGrille();
-    if(checkWin()){
-        //TODO faire une action de fin
-        console.log("Fini");
-    }
+
+
 }
 
 function switchPlayer(){
@@ -163,8 +163,13 @@ function actionIA(){
 
     }
 
-
-    addSign(position);
+    if(typeof position == 'undefined'){
+        gameOver = true;
+        document.getElementById('gagnant').innerHTML = "Match nul";
+    }
+    else{
+        addSign(position);
+    }
 }
 
 
