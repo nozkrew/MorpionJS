@@ -5,5 +5,7 @@ Installation
 ============
 
 git clone https://github.com/nozkrew/MorpionJS.git
+
 Ouvrir l'index.html
+
 Jouez
